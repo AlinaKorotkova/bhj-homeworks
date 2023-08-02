@@ -1,18 +1,14 @@
-'use strict'
+const hasTooltips = Array.from(document.querySelectorAll('.has-tooltip'));
 
-window.onload = function() {
-	let arr = Array.from(document.querySelectorAll('.has-tooltip'));
-	for (let element of arr) {
-		element.onclick = function(event) {
-			let hint = document.querySelector('.tooltip');
-			hint.classList.toggle('tooltip_active');
-			if(hint.innerText !== event.currentTarget.getAttribute('title')){
-				hint.innerText = event.currentTarget.getAttribute('title');
-				hint.classList.add('tooltip_active');
-			}
-			hint.style.left = event.currentTarget.getBoundingClientRect().left + 'px';
-			hint.style.top = event.currentTarget.getBoundingClientRect().bottom + 'px';
-			return false;
-		};
-	}	
-}
+hasTooltips.forEach((el) => {
+        el.insertAdjacentHTML('afterEnd', `<div class="tooltip">${el.title}</div>`);
+        el.nextElementSibling.style.position = "absolute";
+        el.nextElementSibling.style.left = `${el.getBoundingClientRect().left}px`;
+});
+
+hasTooltips.forEach((el) => {
+    el.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        el.nextElementSibling.classList.toggle('tooltip_active');
+    });
+});
