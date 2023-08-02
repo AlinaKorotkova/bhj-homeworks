@@ -1,43 +1,46 @@
-const arrProductQuantityControlDec = Array.from(document.querySelectorAll('.product__quantity-control_dec'));
-const arrProductQuantityControlInc = Array.from(document.querySelectorAll('.product__quantity-control_inc'));
-const productAdd = Array.from(document.querySelectorAll('.product__add'));
+const productControlInc = Array.from(document.getElementsByClassName('product__quantity-control product__quantity-control_inc'));
+const productControlDec = Array.from(document.getElementsByClassName('product__quantity-control product__quantity-control_dec'));
+const productAdd = Array.from(document.getElementsByClassName('product__add'));
 const cartProducts = document.querySelector('.cart__products');
-let allCartProducts = document.getElementsByClassName('cart__product');
+const cartProduct = document.getElementsByClassName('cart__product');
+const minCount = 1;
 
-arrProductQuantityControlDec.forEach((el) => {
-    el.addEventListener('click', () => {
-        let quantity = Number(el.nextElementSibling.textContent);
-        if (quantity >= 2) {
-            el.nextElementSibling.textContent -= 1;
-        }
-    });
-});
+productControlDec.forEach( (e) => {
+	e.addEventListener('click', (event) => {
+		event.currentTarget.nextElementSibling.innerText <= minCount ? alert('Выберите колличетсво товара не меньше одного')
+		: event.currentTarget.nextElementSibling.innerText --;
+	})
+})
 
-arrProductQuantityControlInc.forEach((el) => {
-    el.addEventListener('click', () => {
-        let quantity = Number(el.previousElementSibling.textContent);
-        quantity += 1;
-        el.previousElementSibling.textContent = quantity;
-    });
-});
 
-productAdd.forEach((el) => {
-    el.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        let id = el.closest('.product').dataset.id;
-        let arrAllCartProducts = Array.from(allCartProducts);
-        let quantity = el.previousElementSibling.querySelector('.product__quantity-value').textContent;
-        let elementCart = arrAllCartProducts.find((elem) => elem.dataset.id == id);
 
-        if (elementCart) {
-            elementCart.querySelector('.cart__product-count').textContent = quantity;
-        } else {
-            let cartProduct = document.createElement('div');
-            cartProducts.appendChild(cartProduct);
-            cartProduct.outerHTML = `<div class="cart__product" data-id="${id}">
-                                       <img class="cart__product-image" src="${el.closest('.product__controls').previousElementSibling.src}">
-                                       <div class="cart__product-count">${quantity}</div>
-                                     </div>`;
-        }
-    });
-});
+productControlInc.forEach( (e) => {
+	e.addEventListener('click', (event) => {
+		event.currentTarget.previousElementSibling.innerText ++;
+	})
+})
+
+
+
+productAdd.forEach( (element) => {
+	element.addEventListener('click', (event) => {
+		let dataId = Number(event.currentTarget.closest('.product').getAttribute('data-id'));
+		let img = event.currentTarget.closest('.product').querySelector('img').getAttribute('src');
+		let count = Number(event.currentTarget.previousElementSibling.querySelector('.product__quantity-value').innerText);
+		let htmlBasket = `<div class="cart__product" data-id=" ` + dataId +` ">
+            <img class="cart__product-image" src="` + img +`">
+            <div class="cart__product-count">` + count + `</div>
+            </div>`;
+
+
+		for(let i= 0; i <= cartProduct.length -1; i++) {
+			if(Number(cartProduct[i].getAttribute('data-id')) === dataId) {
+				cartProduct[i].querySelector('.cart__product-count').innerText =
+					Number(cartProduct[i].querySelector('.cart__product-count').innerText) + count;
+				return
+			}
+		}
+		cartProducts.insertAdjacentHTML('beforeEnd', htmlBasket);
+
+	})
+})
