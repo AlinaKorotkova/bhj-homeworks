@@ -30,7 +30,7 @@ btnLogin.addEventListener('click', (e) => {
     })
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://netology-slow-rest.herokuapp.com/auth.php');
+    xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth');
     xhr.send(userData);
 
     xhr.onreadystatechange = function () {
